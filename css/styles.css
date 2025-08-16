@@ -1,0 +1,115 @@
+/* Global styles for the enhanced Creed Thoughts trivia game */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #F9F9F9;
+    /* Use a wood‑toned bar background. The image is provided in assets/images */
+    background: url('../assets/images/bar-background.png') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Semi‑transparent overlay to improve readability over the busy background */
+.overlay {
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Top navigation bar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.navbar h1 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+}
+.navbar a {
+    color: #F9F9F9;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+.navbar a:hover {
+    color: #e2b07b;
+}
+
+/* Card containers used throughout the UI */
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Utility class to hide elements */
+.hidden {
+    display: none !important;
+}
+
+/* Primary button styling */
+button {
+    background: #e2b07b;
+    border: none;
+    color: #222;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+button:hover {
+    background: #f5c58b;
+}
+
+/* Form inputs */
+input, select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #888;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(255,255,255,0.2);
+    color: #F9F9F9;
+}
+input::placeholder {
+    color: #cccccc;
+}
+
+/* Answer buttons */
+.answer {
+    background: rgba(255,255,255,0.15);
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.answer:hover {
+    background: rgba(255,255,255,0.25);
+}
+.answer.selected {
+    background: rgba(82, 179, 217, 0.4);
+}
+.answer.correct {
+    background: rgba(76, 175, 80, 0.5);
+}
+.answer.wrong {
+    background: rgba(244, 67, 54, 0.5);
+}

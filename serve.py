@@ -19,14 +19,23 @@ import os
 
 PORT = 8000
 
+
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
     """A request handler that suppresses log messages for cleanliness."""
+
     def log_message(self, format, *args):
         pass
 
+
+class ReusableTCPServer(socketserver.TCPServer):
+    """TCPServer with ``allow_reuse_address`` enabled."""
+
+    allow_reuse_address = True
+
+
 if __name__ == '__main__':
     os.chdir(os.path.dirname(__file__))
-    with socketserver.TCPServer(("", PORT), QuietHandler) as httpd:
+    with ReusableTCPServer(("", PORT), QuietHandler) as httpd:
         print(f"Serving Creed Thoughts trivia at http://localhost:{PORT}/")
         print("Press Ctrl+C to stop.")
         try:

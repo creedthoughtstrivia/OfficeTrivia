@@ -1,0 +1,16 @@
+{
+  "meta": { "setId": "office-pack-002", "title": "Office Pack Vol. 2", "author": "CT Team", "version": 1 },
+  "settings": { "shuffleQuestions": true, "shuffleAnswers": true, "perQuestionTimerSec": 25, "showExplanations": true },
+  "questions": [
+    { "id": "Q-001", "type": "single", "prompt": "What branch does Jim transfer to at the start of Season 3?", "answers": ["Stamford", "Buffalo", "Utica", "Nashua"], "correctIndex": 0, "explanation": "Jim briefly works at the Stamford branch." },
+    { "id": "Q-002", "type": "single", "prompt": "Who accidentally started the fire by leaving a cheesy pita in the toaster oven?", "answers": ["Ryan", "Dwight", "Pam", "Kevin"], "correctIndex": 0, "explanation": "Ryan's lunch caused the small kitchen fire." },
+    { "id": "Q-003", "type": "single", "prompt": "What does Michael burn his foot on before coming into work?", "answers": ["A George Foreman Grill", "A space heater", "A candle", "A hot plate"], "correctIndex": 0, "explanation": "He steps on a George Foreman Grill he keeps beside his bed." },
+    { "id": "Q-004", "type": "single", "prompt": "What is the name of Dwight's cousin who helps run the beet farm?", "answers": ["Mose", "Zeke", "Jeb", "Todd"], "correctIndex": 0, "explanation": "Dwight's eccentric cousin Mose appears throughout the series." },
+    { "id": "Q-005", "type": "single", "prompt": "Who was Pam engaged to before marrying Jim?", "answers": ["Roy", "Toby", "Andy", "Darryl"], "correctIndex": 0, "explanation": "Pam was previously engaged to Roy Anderson." },
+    { "id": "Q-006", "type": "single", "prompt": "Which character famously declares 'Bears. Beets. Battlestar Galactica.'?", "answers": ["Jim", "Dwight", "Michael", "Andy"], "correctIndex": 0, "explanation": "Jim says it while impersonating Dwight." },
+    { "id": "Q-007", "type": "single", "prompt": "What is the name of the paper company that briefly steals Dunder Mifflin's clients?", "answers": ["Michael Scott Paper Company", "Sabre", "Prince Family Paper", "Staples"], "correctIndex": 0, "explanation": "Michael, Pam and Ryan form the Michael Scott Paper Company." },
+    { "id": "Q-008", "type": "single", "prompt": "Who does Angela secretly date while engaged to Andy?", "answers": ["Dwight", "Jim", "Oscar", "Stanley"], "correctIndex": 0, "explanation": "Angela continues her affair with Dwight." },
+    { "id": "Q-009", "type": "single", "prompt": "What is the title of Michael's action movie screenplay?", "answers": ["Threat Level Midnight", "Agent Michael Scarn", "Midnight Threat", "The Scranton Strangler"], "correctIndex": 0, "explanation": "Michael writes and later films 'Threat Level Midnight.'" },
+    { "id": "Q-010", "type": "single", "prompt": "Which employee did Michael hit with his car in the parking lot?", "answers": ["Meredith", "Phyllis", "Stanley", "Kelly"], "correctIndex": 0, "explanation": "Michael runs over Meredith Palmer in the parking lot." }
+  ]
+}

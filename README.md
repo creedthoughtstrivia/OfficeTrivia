@@ -1,51 +1,71 @@
-# Creed Thoughts Trivia — Enhanced Edition
+# Creed Thoughts Trivia — Mega Edition
 
-This enhanced version of the Creed Thoughts trivia game adds a bar‑themed user interface, sound effects, live multiplayer tournaments and an admin panel while maintaining all of the original features. To enjoy the game fully, follow the instructions below.
+This version of the Creed Thoughts trivia game builds on the enhanced edition by
+adding a 500‑question mega pack, improved sound effects, and a simple Python
+server script.  It preserves the polished bar‑themed interface, live
+multiplayer tournaments with host controls, solo leaderboards, and an admin
+panel.  To enjoy all features, follow the instructions below.
+
+## New features
+
+* **Mega Mixed Pack (500 Questions)** — a new question set combining 100
+  trivia questions about *The Office* and 400 dynamically generated
+  arithmetic questions.  Load this set from the question set dropdown in
+  Solo Play or when creating a Live Match.
+* **Improved sound** — audio feedback now uses frequency sweeps with an
+  exponential decay, giving correct answers a pleasant ascending tone and
+  wrong answers a descending tone.  Clicks trigger a short neutral chirp.
+* **Local server script** — run `serve.py` to start a quiet HTTP server on
+  port 8000.  This simplifies starting the game without needing to recall
+  Python or Node commands.
 
 ## Running the game
 
-Because the code is organised as ES modules (each JavaScript file imports other files), modern browsers enforce that these files be served over a local HTTP server. Loading pages directly from the `file://` protocol will prevent the scripts from running, which is why you may see empty dropdowns or silent audio.
+Modern browsers block ES module imports when pages are loaded directly from
+disk (the `file://` protocol).  To play the game with live multiplayer and
+sound, you must serve the files over HTTP.  Two easy options are provided:
 
-To run the game locally:
+1. **Using the built‑in Python server**
 
-1. Open a terminal in the `enhanced_game` folder (where this README lives).
-2. Start a simple HTTP server. You can use either Python or Node.js:
+   1. Open a terminal in the `enhanced_game_v3` folder.
+   2. Run:
 
-   ### Using Python (version 3)
+      ```bash
+      python3 serve.py
+      ```
+
+   3. Open your browser and visit `http://localhost:8000/index.html`.
+
+2. **Using Python’s standard HTTP server**
+
+   If you prefer a one‑liner, you can run:
 
    ```bash
    python3 -m http.server 8000
    ```
 
-   ### Using Node.js
+   Then browse to `http://localhost:8000`.
 
-   If you have `npm` installed, install `http-server` once with:
+Once the server is running, the Solo Play dropdown will populate with all
+available question sets, including the new mega pack.  Sound effects will play
+after your first interaction (browsers require a user gesture to resume the
+audio context).
 
-   ```bash
-   npm install -g http-server
-   ```
+## Firebase configuration
 
-   Then start the server:
+To enable remote leaderboards and live tournaments that sync across devices,
+create a Firebase project and replace the placeholder values in
+`js/config.js`.  Set `enabled` to `true`.  Without Firebase configured, the
+leaderboard will work locally in your browser only and live matches will not
+function.
 
-   ```bash
-   http-server -p 8000
-   ```
+## Extending the game
 
-3. Once the server is running, open your browser and navigate to `http://localhost:8000/index.html`.
+* **More question sets** — drop JSON files into `questions/` and add their
+  metadata to `js/config.js` under `APP.QUESTION_SETS`.
+* **Custom audio** — replace the synthesised tones by loading audio files
+  from `assets/audio/` and updating `js/sound.js` to play them.
+* **Additional game modes** — the code is modular; feel free to add new
+  pages or enhance existing ones with achievements, hints, or Easter eggs.
 
-You should now see the bar background with working dropdowns and hear the sound effects when you click buttons or answer questions.
-
-## Configuring Firebase
-
-For leaderboard persistence and live tournament functionality you will need a Firebase project. Open `js/config.js` and replace the placeholder values under `FB.config` with your own Firebase credentials, then set `enabled: true`.
-
-## Adding question sets
-
-Question sets live in the `questions/` folder as JSON files. To add more trivia categories, place new JSON files in that directory and list them in `js/config.js` under `APP.QUESTION_SETS`.
-
-## Trouble shooting
-
-* **Empty dropdown or no sound** — make sure you are accessing the pages via `http://localhost` and not `file://` URLs. Modules cannot be loaded directly from disk.
-* **No audio** — browsers often require a user gesture before audio can play. After clicking a button once the sound system will initialise. We use a single `AudioContext` and resume it automatically on interaction.
-
-Enjoy your trivia night!
+Enjoy your trivia night and let us know what other features you’d like to see!

@@ -139,6 +139,7 @@ const btnNext = el('#btnNext');
 const resultSummary = el('#resultSummary');
 const quizMeta = el('#quizMeta');
 const btnShare = el('#btnShare');
+const configCard = el('#configCard');
 
 // Populate the question set dropdown and leaderboard on page load
 (function init() {
@@ -191,6 +192,7 @@ function startQuiz({ name, qs }) {
   state = { name, qs, idx:0, score:0, startAt: performance.now(), perQ: [] };
   quizCard.classList.remove('hidden');
   resultCard.classList.add('hidden');
+  configCard.classList.add('hidden');
   renderQ();
 }
 
@@ -279,6 +281,7 @@ function nextQ() {
 function finishQuiz() {
   quizCard.classList.add('hidden');
   resultCard.classList.remove('hidden');
+  configCard.classList.remove('hidden');
   const durationMs = Math.max(0, performance.now() - state.startAt);
   resultSummary.innerHTML = `${state.name} scored ${state.score} in ${Math.round(durationMs/1000)}s.`;
   addLocalScore({ name: state.name, score: state.score, durationMs });

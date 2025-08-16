@@ -2,7 +2,11 @@
 // Adjust these values before deploying to production. The OWNER_PASSCODE should
 // be randomized and kept secret. QUESTION_SETS can be extended with
 // additional JSON files placed under a `questions/` directory.
-export const APP = {
+// In a traditional ES module environment the constants below would be exported.
+// However, when loading this file directly via `file://` without a web server
+// module imports are disallowed. We instead define the objects and then
+// assign them to the global `window` so other scripts can access them.
+const APP = {
   // Replace with your randomized value before deploy
   OWNER_PASSCODE: "change-me-483920",
   DEFAULTS: {
@@ -23,8 +27,11 @@ export const APP = {
 
 // Firebase configuration. Paste values from your Firebase console here. Set
 // `enabled` to false to run the game locally without persistence.
-export const FB = {
-  enabled: true,
+const FB = {
+  // Disable Firebase by default in the offline edition. When enabled is
+  // true the game will attempt to load the Firebase SDK via dynamic import,
+  // which is only supported in module contexts.
+  enabled: false,
   config: {
     apiKey: "PASTE_HERE",
     authDomain: "PASTE_HERE.firebaseapp.com",
@@ -39,3 +46,8 @@ export const FB = {
     matches: "matches"
   }
 };
+
+// Expose configuration objects globally. Doing this allows the game to run
+// without ES module imports when loaded from a local file.
+window.APP = APP;
+window.FB = FB;

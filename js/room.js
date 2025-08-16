@@ -3,8 +3,10 @@
 // answering questions. Plays subtle sounds on interactions and updates
 // leaderboard in real time.
 
-import { subscribeMatch, submitAnswer } from './rt.js';
-import { playSound } from './sound.js';
+// Use global functions instead of module imports when running from a file.
+const subscribeMatch = window.subscribeMatch;
+const submitAnswer = window.submitAnswer;
+const playSound = window.playSound;
 
 // Extract query parameters (matchId and playerId) from the URL
 const params = new URLSearchParams(location.search);

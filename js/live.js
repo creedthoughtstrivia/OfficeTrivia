@@ -3,9 +3,17 @@
 // connects to Firestore to create matches, manage players and control game
 // progression. It integrates simple audio feedback for UI interactions.
 
-import { APP } from './config.js';
-import { fbReady, createMatch, findMatchByCode, joinMatch, subscribeMatch, hostAction, submitAnswer, endMatch } from './rt.js';
-import { playSound } from './sound.js';
+// When running without module support, use global objects/functions attached to window.
+const APP = window.APP;
+const fbReady = window.fbReady;
+const createMatch = window.createMatch;
+const findMatchByCode = window.findMatchByCode;
+const joinMatch = window.joinMatch;
+const subscribeMatch = window.subscribeMatch;
+const hostAction = window.hostAction;
+const submitAnswer = window.submitAnswer;
+const endMatch = window.endMatch;
+const playSound = window.playSound;
 
 const el = s => document.querySelector(s);
 const hostPin = el('#hostPin'), matchCode=el('#matchCode'), setLive=el('#setLive'),

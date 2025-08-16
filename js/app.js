@@ -2,9 +2,13 @@
 // Solo play logic for the enhanced Creed Thoughts trivia game. This module
 // handles question selection, timing, scoring and integrates audio feedback.
 
-import { APP } from './config.js';
-import { fbReady, addSoloScore, getSoloTop } from './rt.js';
-import { playSound } from './sound.js';
+// When running without module support, use globals assigned by config.js,
+// rt.js and sound.js.
+const APP = window.APP;
+const fbReady = window.fbReady;
+const addSoloScore = window.addSoloScore;
+const getSoloTop = window.getSoloTop;
+const playSound = window.playSound;
 
 const el = s => document.querySelector(s);
 const nameSolo = el('#nameSolo');

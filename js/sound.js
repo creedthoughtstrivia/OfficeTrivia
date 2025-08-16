@@ -5,10 +5,25 @@
 // implementations with actual audio samples by loading Audio objects from
 // `/assets/audio` and playing them in the functions below.
 
-export function playSound(type) {
+// Create a single AudioContext instance so browsers don’t block repeated instantiations.
+let _ctx;
+
+/**
+ * Play a short synthesised tone. Browsers often require that an AudioContext
+ * be resumed in response to user interaction (e.g. a click). This function
+ * resumes the context if it’s suspended before playing the tone.
+ *
+ * @param {string} type One of 'click', 'correct', 'wrong', or any other key
+ */
+function playSound(type) {
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   if (!AudioContext) return;
-  const ctx = new AudioContext();
+  if (!_ctx) _ctx = new AudioContext();
+  const ctx = _ctx;
+  // Resume context on user gesture
+  if (ctx.state === 'suspended') {
+    ctx.resume();
+  }
   function beep(freq, duration = 0.2) {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -33,3 +48,7 @@ export function playSound(type) {
       beep(300, 0.05);
   }
 }
+
+// Attach the playSound function to the global window object so that pages
+// loaded without module support can call it directly.
+window.playSound = playSound;

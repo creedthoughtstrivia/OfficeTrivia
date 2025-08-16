@@ -93,4 +93,12 @@ function updateTimer(){
   timeLeft--;
 }
 
-function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({ '&':'&','<':'<','>':'>','"':'"','\'':'\'' }[c])); }
+function escapeHtml(s){
+  return (s || '').replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;"
+  }[c]));
+}

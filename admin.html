@@ -36,10 +36,14 @@
     </section>
   </main>
 </div>
-<script type="module">
-  import { APP } from './js/config.js';
-  import { clearSoloScores } from './js/rt.js';
-  import { playSound } from './js/sound.js';
+<!-- Load global scripts -->
+<script src="js/config.js"></script>
+<script src="js/rt.js"></script>
+<script src="js/sound.js"></script>
+<script>
+  const APP = window.APP;
+  const clearSoloScores = window.clearSoloScores;
+  const playSound = window.playSound;
   const sBase = document.getElementById('sBase');
   const sSpeedMax = document.getElementById('sSpeedMax');
   const sFirst = document.getElementById('sFirst');
@@ -61,8 +65,8 @@
     sDailySeed.checked = settings.DAILY_SEED;
   }
   loadSettings();
-  btnSave.addEventListener('click', ()=>{
-    playSound('click');
+  btnSave.addEventListener('click', () => {
+    if (playSound) playSound('click');
     const newSettings = {
       BASE_CORRECT: parseInt(sBase.value||'100',10),
       SPEED_MAX: parseInt(sSpeedMax.value||'50',10),
@@ -75,10 +79,10 @@
     localStorage.setItem('ct_settings', JSON.stringify(newSettings));
     alert('Settings saved!');
   });
-  btnClearSolo.addEventListener('click', async ()=>{
-    playSound('click');
+  btnClearSolo.addEventListener('click', async () => {
+    if (playSound) playSound('click');
     if (confirm('Clear solo leaderboard?')) {
-      await clearSoloScores();
+      if (clearSoloScores) await clearSoloScores();
       alert('Solo leaderboard cleared.');
     }
   });

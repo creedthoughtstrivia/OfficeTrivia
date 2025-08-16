@@ -23,12 +23,14 @@
     </section>
   </main>
 </div>
-<script type="module">
-  import './js/config.js';
-  import { getSoloTop, fbReady } from './js/rt.js';
-  import { playSound } from './js/sound.js';
+<script src="js/config.js"></script>
+<script src="js/rt.js"></script>
+<script src="js/sound.js"></script>
+<script>
   const lbSolo = document.getElementById('lbSolo');
   async function load(){
+    const fbReady = window.fbReady;
+    const getSoloTop = window.getSoloTop;
     lbSolo.innerHTML = fbReady() ? 'Loading…' : 'Local‑only (enable Firebase in config.js)';
     const rows = fbReady() ? await getSoloTop(50) : [];
     if (!rows.length) { lbSolo.textContent = 'No scores yet.'; return; }

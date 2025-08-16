@@ -48,13 +48,13 @@
     </section>
   </main>
 </div>
-<script type="module">
-  import './js/config.js';
-  import './js/rt.js';
-  import { playSound } from './js/sound.js';
-  import './js/live.js';
+<script src="js/config.js"></script>
+<script src="js/rt.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/live.js"></script>
+<script>
   document.querySelectorAll('button, a').forEach(el=>{
-    el.addEventListener('click', ()=>playSound('click'));
+    el.addEventListener('click', () => window.playSound && window.playSound('click'));
   });
 </script>
 </body>

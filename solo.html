@@ -48,16 +48,263 @@
     </section>
   </main>
 </div>
-<!-- Load modules -->
-<script type="module">
-  import './js/config.js';
-  import './js/rt.js';
-  import { playSound } from './js/sound.js';
-  import './js/app.js';
-  // Provide click sounds on buttons and links
-  document.querySelectorAll('button, a').forEach(el=>{
-    el.addEventListener('click', ()=>playSound('click'));
+<!-- Inline script containing configuration, sound manager and solo quiz logic.
+     Embedding all scripts in this file avoids issues with loading external
+     resources via the file:// protocol. -->
+<script>
+// --- Configuration ---
+const APP = {
+  DEFAULTS: {
+    BASE_CORRECT: 100,
+    SPEED_MAX: 50,
+    FIRST_CORRECT: 100,
+    TIME_PER_Q: 25,
+    SHUFFLE_Q: true,
+    SHUFFLE_A: true
+  },
+  QUESTION_SETS: [
+    { id: 'creed-basics-001', title: 'Creed Basics Vol. 1', questions: [
+      { id: 'Q1', prompt: 'Which department does Creed list as his job at Dunder Mifflin?', answers: ['Quality Assurance','Sales','Accounting','HR'], correctIndex:0, explanation:'Creed Bratton is Quality Assurance.' },
+      { id: 'Q2', prompt: 'Creed once dyed his hair for which occasion?', answers: ['A job interview','Halloween','A wedding','A court date'], correctIndex:1, explanation:'He shows up with jet‑black hair around Halloween.' },
+      { id: 'Q3', prompt: 'Creed runs a blog that is actually what?', answers: ['A Word doc','A MySpace page','A real blog','An email list'], correctIndex:0, explanation:'\u2018Creed Thoughts\u2019 was a Word document according to Ryan.' },
+      { id: 'Q4', prompt: 'Creed often confuses which coworker’s name?', answers: ['Angela','Oscar','Meredith','Karen'], correctIndex:2, explanation:'He calls Meredith different names at times.' },
+      { id: 'Q5', prompt: 'What instrument does Creed play?', answers: ['Guitar','Drums','Piano','Harmonica'], correctIndex:0, explanation:'Creed plays guitar.' }
+    ] },
+    { id: 'creed-pack-001A', title: 'Creed Pack 001A — Creed & Office General', questions: [
+      { id:'P1', prompt:'What department is Creed in at Dunder Mifflin?', answers:['Quality Assurance','Sales','Accounting','Human Resources'], correctIndex:0, explanation:'He heads Quality Assurance.' },
+      { id:'P2', prompt:'Creed’s “blog” was actually what?', answers:['A Word document','A MySpace page','A real Tumblr','An email newsletter'], correctIndex:0, explanation:'Ryan set up a Word doc and told Creed it was a blog.' },
+      { id:'P3', prompt:'Which instrument does Creed play?', answers:['Guitar','Drums','Piano','Violin'], correctIndex:0, explanation:'Both character and actor play guitar.' },
+      { id:'P4', prompt:'Which real band was Creed (the actor) a member of?', answers:['The Grass Roots','The Doors','The Monkees','The Byrds'], correctIndex:0, explanation:'Creed Bratton was a member of The Grass Roots.' },
+      { id:'P5', prompt:'Around Halloween, what did Creed suddenly change about his appearance?', answers:['Jet‑black dyed hair','Shaved eyebrows','Bleached beard','Face paint'], correctIndex:0, explanation:'He shows up with jet‑black hair.' },
+      { id:'P6', prompt:'What paper company do the employees work for?', answers:['Dunder Mifflin','Wernham Hogg','Pied Piper','Vance Paper'], correctIndex:0, explanation:'It’s the Scranton branch of Dunder Mifflin.' },
+      { id:'P7', prompt:'Who is the Scranton branch regional manager for most of the early series?', answers:['Michael Scott','Jan Levinson','Jim Halpert','Dwight Schrute'], correctIndex:0, explanation:'Michael Scott leads the branch.' },
+      { id:'P8', prompt:'Jim and Pam get married at which famous location?', answers:['Niagara Falls','Central Park','Lake Scranton','The Poconos'], correctIndex:0, explanation:'They elope on the Maid of the Mist at Niagara Falls.' },
+      { id:'P9', prompt:'Dwight owns which kind of farm?', answers:['A beet farm','A corn farm','A pumpkin farm','A dairy farm'], correctIndex:0, explanation:'Schrute Farms is a beet farm.' },
+      { id:'P10', prompt:'Angela’s beloved cat that met an unfortunate end was named…', answers:['Sprinkles','Bandit','Garbage','Princess Lady'], correctIndex:0, explanation:'Sprinkles was the cat Dwight disposed of.' }
+    ] }
+  ]
+};
+
+// --- Sound manager ---
+let _ctx;
+function playSound(type) {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return;
+  if (!_ctx) _ctx = new AudioContext();
+  const ctx = _ctx;
+  if (ctx.state === 'suspended') ctx.resume();
+  function beep(freq, duration=0.2) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.frequency.value = freq;
+    gain.gain.value = 0.1;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  }
+  switch (type) {
+    case 'correct': beep(800,0.3); break;
+    case 'wrong':   beep(200,0.3); break;
+    case 'click':   beep(400,0.05); break;
+    default:        beep(300,0.05);
+  }
+}
+
+// --- Local scoreboard persistence ---
+const SCORE_KEY = 'ct_solo_scores';
+function addLocalScore(entry) {
+  const scores = JSON.parse(localStorage.getItem(SCORE_KEY)||'[]');
+  scores.push(entry);
+  // Sort descending by score then ascending by duration
+  scores.sort((a,b) => b.score - a.score || a.durationMs - b.durationMs);
+  localStorage.setItem(SCORE_KEY, JSON.stringify(scores.slice(0,50)));
+}
+function getLocalTop(limit=20) {
+  const scores = JSON.parse(localStorage.getItem(SCORE_KEY)||'[]');
+  return scores.slice(0, limit);
+}
+
+// --- Solo quiz logic ---
+const el = s => document.querySelector(s);
+const nameSolo = el('#nameSolo');
+const setSolo  = el('#setSolo');
+const countSolo= el('#countSolo');
+const btnStart = el('#btnStartSolo');
+const lbDiv    = el('#leaderboard');
+const quizCard = el('#quizCard');
+const resultCard = el('#resultCard');
+const qBox = el('#questionBox');
+const btnNext = el('#btnNext');
+const resultSummary = el('#resultSummary');
+const quizMeta = el('#quizMeta');
+const btnShare = el('#btnShare');
+
+// Populate the question set dropdown and leaderboard on page load
+(function init() {
+  APP.QUESTION_SETS.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s.id;
+    o.textContent = s.title;
+    setSolo.appendChild(o);
   });
+  refreshLeaderboard();
+})();
+
+function refreshLeaderboard() {
+  const rows = getLocalTop(20);
+  if (!rows.length) {
+    lbDiv.textContent = 'No scores yet.';
+    return;
+  }
+  const ol = document.createElement('ol');
+  rows.forEach(r => {
+    const li = document.createElement('li');
+    li.textContent = `${r.name}: ${r.score} pts (${Math.round(r.durationMs/1000)}s)`;
+    ol.appendChild(li);
+  });
+  lbDiv.innerHTML = '';
+  lbDiv.appendChild(ol);
+}
+
+// Start quiz on button click
+btnStart.addEventListener('click', () => {
+  playSound('click');
+  const name = (nameSolo.value||'Player').trim().slice(0,20);
+  const setId = setSolo.value;
+  const count = Math.max(5, Math.min(50, parseInt(countSolo.value||'12',10)));
+  const set = APP.QUESTION_SETS.find(s => s.id === setId);
+  let qs = set.questions.slice();
+  if (APP.DEFAULTS.SHUFFLE_Q) shuffle(qs);
+  qs = qs.slice(0, count);
+  qs.forEach(q => {
+    // shuffle answers
+    q._answerMap = q.answers.map((a,i) => ({a,i}));
+    if (APP.DEFAULTS.SHUFFLE_A) shuffle(q._answerMap);
+    q._correctIndexShuffled = q._answerMap.findIndex(x => x.i === q.correctIndex);
+  });
+  startQuiz({ name, qs });
+});
+
+let state = null;
+function startQuiz({ name, qs }) {
+  state = { name, qs, idx:0, score:0, startAt: performance.now(), perQ: [] };
+  quizCard.classList.remove('hidden');
+  resultCard.classList.add('hidden');
+  renderQ();
+}
+
+let timerId=null, timeLeft=0;
+function renderQ() {
+  const q = state.qs[state.idx];
+  quizMeta.innerHTML = `${state.name} \u2022 Q ${state.idx+1}/${state.qs.length}`;
+  qBox.innerHTML = `${q.prompt}`;
+  if (q.image) qBox.insertAdjacentHTML('beforeend', `<img src="${q.image}" alt="" style="max-width:100%;margin-top:8px;">`);
+  if (q.audio) qBox.insertAdjacentHTML('beforeend', `<audio controls src="${q.audio}"></audio>`);
+  q._selected = null;
+  q._start = performance.now();
+  const answersDiv = document.createElement('div');
+  q._answerMap.forEach((row, idx) => {
+    const d = document.createElement('div');
+    d.className = 'answer';
+    d.textContent = row.a;
+    d.addEventListener('click', () => selectAns(idx));
+    answersDiv.appendChild(d);
+  });
+  qBox.appendChild(answersDiv);
+  btnNext.disabled = true;
+  btnNext.onclick = nextQ;
+  timeLeft = q.timeLimitSec || APP.DEFAULTS.TIME_PER_Q;
+  updateTimer();
+  clearInterval(timerId);
+  timerId = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  const t = document.getElementById('timer');
+  if (!t) return;
+  t.textContent = `${timeLeft}s`;
+  if (timeLeft <= 0) {
+    clearInterval(timerId);
+    lockQuestion();
+  }
+  timeLeft--;
+}
+
+function selectAns(shuffledIdx) {
+  const q = state.qs[state.idx];
+  if (q._locked) return;
+  q._selected = shuffledIdx;
+  [...qBox.querySelectorAll('.answer')].forEach((d,i) => {
+    d.classList.toggle('selected', i===shuffledIdx);
+  });
+  lockQuestion();
+}
+
+function lockQuestion() {
+  const q = state.qs[state.idx];
+  if (q._locked) return;
+  q._locked = true;
+  clearInterval(timerId);
+  const ms = Math.max(0, performance.now() - q._start);
+  const correct = q._selected === q._correctIndexShuffled;
+  if (correct) playSound('correct'); else playSound('wrong');
+  const base = correct ? APP.DEFAULTS.BASE_CORRECT : 0;
+  let speed = 0;
+  if (correct) {
+    const maxMs = 5000;
+    const ratio = Math.max(0, Math.min(1, (maxMs - Math.min(ms,maxMs)) / maxMs));
+    speed = Math.round(APP.DEFAULTS.SPEED_MAX * ratio);
+  }
+  const qScore = base + speed;
+  state.score += qScore;
+  state.perQ.push({ correct, ms, qScore });
+  const nodes = qBox.querySelectorAll('.answer');
+  nodes.forEach((d,i) => {
+    if (i===q._correctIndexShuffled) d.classList.add('correct');
+    if (i===q._selected && i!==q._correctIndexShuffled) d.classList.add('wrong');
+  });
+  btnNext.disabled = false;
+}
+
+function nextQ() {
+  if (state.idx < state.qs.length-1) {
+    state.idx++;
+    renderQ();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz() {
+  quizCard.classList.add('hidden');
+  resultCard.classList.remove('hidden');
+  const durationMs = Math.max(0, performance.now() - state.startAt);
+  resultSummary.innerHTML = `${state.name} scored ${state.score} in ${Math.round(durationMs/1000)}s.`;
+  addLocalScore({ name: state.name, score: state.score, durationMs });
+  refreshLeaderboard();
+}
+
+btnShare.addEventListener('click', async () => {
+  playSound('click');
+  const txt = resultSummary.textContent.trim() + ' #CreedThoughtsTrivia';
+  try {
+    await navigator.clipboard.writeText(txt);
+    alert('Copied to clipboard!');
+  } catch { alert('Could not copy.'); }
+});
+
+function shuffle(a) {
+  for(let i=a.length-1;i>0;i--) {
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+}
+
+// Add click sound to all buttons and links
+document.querySelectorAll('button, a').forEach(el => {
+  el.addEventListener('click', () => playSound('click'));
+});
 </script>
 </body>
 </html>

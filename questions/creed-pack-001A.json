@@ -1,0 +1,161 @@
+{
+  "meta": {
+    "setId": "creed-pack-001A",
+    "title": "Creed Pack 001A — Creed & Office General",
+    "author": "CT Team",
+    "version": 1
+  },
+  "settings": {
+    "shuffleQuestions": true,
+    "shuffleAnswers": true,
+    "perQuestionTimerSec": 25,
+    "showExplanations": true
+  },
+  "questions": [
+    {
+      "id": "Q-001",
+      "type": "single",
+      "prompt": "What department is Creed in at Dunder Mifflin?",
+      "answers": [
+        "Quality Assurance",
+        "Sales",
+        "Accounting",
+        "Human Resources"
+      ],
+      "correctIndex": 0,
+      "explanation": "Creed Bratton is the head of Quality Assurance.",
+      "tags": ["creed", "role"],
+      "difficulty": 1
+    },
+    {
+      "id": "Q-002",
+      "type": "single",
+      "prompt": "Creed’s ‘blog’ was actually what?",
+      "answers": [
+        "A Word document",
+        "A MySpace page",
+        "A real Tumblr",
+        "An email newsletter"
+      ],
+      "correctIndex": 0,
+      "explanation": "Ryan set up a Word document and told Creed it was his blog.",
+      "tags": ["creed", "running-joke"],
+      "difficulty": 1
+    },
+    {
+      "id": "Q-003",
+      "type": "single",
+      "prompt": "Which instrument does Creed play?",
+      "answers": [
+        "Guitar",
+        "Drums",
+        "Piano",
+        "Violin"
+      ],
+      "correctIndex": 0,
+      "explanation": "Both the character and actor play guitar.",
+      "tags": ["creed", "music"],
+      "difficulty": 1
+    },
+    {
+      "id": "Q-004",
+      "type": "single",
+      "prompt": "Which real band was Creed (the actor) a member of?",
+      "answers": [
+        "The Grass Roots",
+        "The Doors",
+        "The Monkees",
+        "The Byrds"
+      ],
+      "correctIndex": 0,
+      "explanation": "Creed Bratton was a member of The Grass Roots.",
+      "tags": ["creed", "music", "behind-the-scenes"],
+      "difficulty": 2
+    },
+    {
+      "id": "Q-005",
+      "type": "single",
+      "prompt": "Around Halloween, what did Creed suddenly change about his appearance?",
+      "answers": [
+        "Jet‑black dyed hair",
+        "Shaved eyebrows",
+        "Bleached beard",
+        "Face paint"
+      ],
+      "correctIndex": 0,
+      "explanation": "He shows up with jet‑black hair around Halloween.",
+      "tags": ["creed", "halloween"],
+      "difficulty": 1
+    },
+    {
+      "id": "Q-006",
+      "type": "single",
+      "prompt": "What paper company do the employees work for?",
+      "answers": ["Dunder Mifflin", "Wernham Hogg", "Pied Piper", "Vance Paper"],
+      "correctIndex": 0,
+      "explanation": "They work at the Scranton branch of Dunder Mifflin.",
+      "tags": ["general"],
+      "difficulty": 1
+    },
+    {
+      "id": "Q-007",
+      "type": "single",
+      "prompt": "Who is the Scranton branch regional manager for most of the early series?",
+      "answers": ["Michael Scott", "Jan Levinson", "Jim Halpert", "Dwight Schrute"],
+      "correctIndex": 0,
+      "explanation": "Michael Scott leads the Scranton branch during the early seasons.",
+      "tags": ["general", "management"],
+      "difficulty": 1
+    },
+    {
+      "id": "Q-008",
+      "type": "single",
+      "prompt": "Jim and Pam get married at which famous location?",
+      "answers": ["Niagara Falls", "Central Park", "Lake Scranton", "The Poconos"],
+      "correctIndex": 0,
+      "explanation": "They elope on the Maid of the Mist at Niagara Falls.",
+      "tags": ["general", "jim", "pam", "wedding"],
+      "difficulty": 1
+    },
+    {
+      "id": "Q-009",
+      "type": "single",
+      "prompt": "Dwight owns which kind of farm?",
+      "answers": ["A beet farm", "A corn farm", "A pumpkin farm", "A dairy farm"],
+      "correctIndex": 0,
+      "explanation": "Schrute Farms is a beet farm and bed & breakfast.",
+      "tags": ["dwight", "farm"],
+      "difficulty": 1
+    },
+    {
+      "id": "Q-010",
+      "type": "single",
+      "prompt": "Angela’s beloved cat that met an unfortunate end was named…",
+      "answers": ["Sprinkles", "Bandit", "Garbage", "Princess Lady"],
+      "correctIndex": 0,
+      "explanation": "Sprinkles was the cat that Dwight disposed of; Bandit appears later.",
+      "tags": ["angela", "cats"],
+      "difficulty": 2
+    },
+    {
+      "id": "Q-011",
+      "type": "single",
+      "prompt": "Kevin is most famously associated with what mishap?",
+      "answers": ["Spilling his chili", "Locking himself in the bathroom", "Dropping a wedding cake", "Shrinking a sweater"],
+      "correctIndex": 0,
+      "explanation": "The cold open where Kevin spills his huge pot of chili is iconic.",
+      "tags": ["kevin", "meme"],
+      "difficulty": 1
+    },
+    {
+      "id": "Q-012",
+      "type": "single",
+      "prompt": "Stanley’s favorite office day is…",
+      "answers": ["Pretzel Day", "Casual Friday", "Scranton Day", "Movie Monday"],
+      "correctIndex": 0,
+      "explanation": "Stanley lives for Pretzel Day when everyone gets a free pretzel.",
+      "tags": ["stanley"],
+      "difficulty": 1
+    }
+  ]
+}

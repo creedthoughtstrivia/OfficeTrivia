@@ -1,0 +1,12 @@
+{
+  "meta": { "setId": "creed-basics-001", "title": "Creed Basics Vol. 1", "author": "CT Team", "version": 1 },
+  "settings": { "shuffleQuestions": true, "shuffleAnswers": true, "perQuestionTimerSec": 20, "showExplanations": true },
+  "questions": [
+    { "id": "Q-001", "type": "single", "prompt": "Which department does Creed list as his job at Dunder Mifflin?", "answers": ["Quality Assurance", "Sales", "Accounting", "HR"], "correctIndex": 0, "explanation": "Creed Bratton is Quality Assurance." },
+    { "id": "Q-002", "type": "single", "prompt": "Creed once dyed his hair for which occasion?", "answers": ["A job interview", "Halloween", "A wedding", "A court date"], "correctIndex": 1, "explanation": "He shows up with jet‑black hair around Halloween." },
+    { "id": "Q-003", "type": "single", "prompt": "Creed runs a blog that is actually what?", "answers": ["A Word doc", "A MySpace page", "A real blog", "An email list"], "correctIndex": 0, "explanation": "‘Creed Thoughts’ was a Word document according to Ryan." },
+    { "id": "Q-004", "type": "single", "prompt": "Creed often confuses which coworker’s name?", "answers": ["Angela", "Oscar", "Meredith", "Karen"], "correctIndex": 2, "explanation": "He calls Meredith different names at times." },
+    { "id": "Q-005", "type": "single", "prompt": "What instrument does Creed play?", "answers": ["Guitar", "Drums", "Piano", "Harmonica"], "correctIndex": 0, "explanation": "Creed (the character and actor) plays guitar." },
+    { "id": "Q-006", "type": "single", "prompt": "Creed claims to have been in which band?", "answers": ["The Grass Roots", "The Doors", "The Monkees", "The Byrds"], "correctIndex": 0, "explanation": "The actor Creed Bratton was indeed in The Grass Roots." }
+  ]
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Live Match - Creed Thoughts Trivia</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div class="overlay">
+  <nav class="navbar">
+    <h1><a href="index.html" style="color: inherit; text-decoration: none;">Creed Thoughts Trivia</a></h1>
+    <ul>
+      <li><a href="solo.html">Solo Play</a></li>
+      <li><a href="live.html">Live Match</a></li>
+      <li><a href="leaderboard.html">Leaderboard</a></li>
+      <li><a href="admin.html">Admin</a></li>
+    </ul>
+  </nav>
+  <main>
+    <!-- Host creation card -->
+    <section class="card">
+      <h2>Host a Tournament</h2>
+      <label>Match Code <input id="matchCode" placeholder="e.g., CREED8" maxLength="8" /></label>
+      <label>Host PIN <input id="hostPin" placeholder="PIN" maxLength="6" type="password" /></label>
+      <label>Question Set <select id="setLive"></select></label>
+      <label>Number of Questions <input id="countLive" type="number" min="5" max="50" value="12" /></label>
+      <label>Time per Question (sec) <input id="timePerQ" type="number" min="5" max="60" value="25" /></label>
+      <button id="btnCreateMatch">Create Match</button>
+    </section>
+    <!-- Join match card -->
+    <section class="card">
+      <h2>Join a Match</h2>
+      <label>Display Name <input id="nameLive" maxLength="20" placeholder="e.g., Bruce" /></label>
+      <label>Match Code <input id="codeLive" maxLength="8" /></label>
+      <button id="btnJoinLive">Join</button>
+    </section>
+    <!-- Host controls card -->
+    <section class="card hidden" id="hostControls">
+      <h2>Host Controls</h2>
+      <p>Players joined: <span id="playerCount">0</span></p>
+      <p>Question Index: <span id="qIdx">-1</span></p>
+      <p id="liveInfo">State: —</p>
+      <button id="btnOpenQ" disabled>Open Question</button>
+      <button id="btnCloseQ" disabled>Close Question</button>
+      <button id="btnNextQ" disabled>Next Question</button>
+      <button id="btnEnd" disabled>End Match</button>
+      <div id="lbLive"></div>
+    </section>
+  </main>
+</div>
+<script type="module">
+  import './js/config.js';
+  import './js/rt.js';
+  import { playSound } from './js/sound.js';
+  import './js/live.js';
+  document.querySelectorAll('button, a').forEach(el=>{
+    el.addEventListener('click', ()=>playSound('click'));
+  });
+</script>
+</body>
+</html>

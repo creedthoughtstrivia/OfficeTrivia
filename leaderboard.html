@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Leaderboard - Creed Thoughts Trivia</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div class="overlay">
+  <nav class="navbar">
+    <h1><a href="index.html" style="color: inherit; text-decoration: none;">Creed Thoughts Trivia</a></h1>
+    <ul>
+      <li><a href="solo.html">Solo Play</a></li>
+      <li><a href="live.html">Live Match</a></li>
+      <li><a href="leaderboard.html">Leaderboard</a></li>
+      <li><a href="admin.html">Admin</a></li>
+    </ul>
+  </nav>
+  <main>
+    <section class="card">
+      <h2>Solo Leaderboard</h2>
+      <div id="lbSolo"></div>
+    </section>
+  </main>
+</div>
+<script type="module">
+  import './js/config.js';
+  import { getSoloTop, fbReady } from './js/rt.js';
+  import { playSound } from './js/sound.js';
+  const lbSolo = document.getElementById('lbSolo');
+  async function load(){
+    lbSolo.innerHTML = fbReady() ? 'Loading…' : 'Local‑only (enable Firebase in config.js)';
+    const rows = fbReady() ? await getSoloTop(50) : [];
+    if (!rows.length) { lbSolo.textContent = 'No scores yet.'; return; }
+    const ol = document.createElement('ol');
+    rows.forEach(r=>{
+      const li = document.createElement('li');
+      li.textContent = `${r.name}: ${r.score} pts (${Math.round(r.durationMs/1000)}s)`;
+      ol.appendChild(li);
+    });
+    lbSolo.innerHTML = '';
+    lbSolo.appendChild(ol);
+  }
+  load();
+</script>
+</body>
+</html>

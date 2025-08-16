@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Solo Play - Creed Thoughts Trivia</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div class="overlay">
+  <!-- Navigation replicated across pages -->
+  <nav class="navbar">
+    <h1><a href="index.html" style="color: inherit; text-decoration: none;">Creed Thoughts Trivia</a></h1>
+    <ul>
+      <li><a href="solo.html">Solo Play</a></li>
+      <li><a href="live.html">Live Match</a></li>
+      <li><a href="leaderboard.html">Leaderboard</a></li>
+      <li><a href="admin.html">Admin</a></li>
+    </ul>
+  </nav>
+  <main>
+    <!-- Configuration section -->
+    <section class="card" id="configCard">
+      <h2>Play Solo</h2>
+      <label>Display Name <input id="nameSolo" maxLength="20" placeholder="e.g., Bruce" /></label>
+      <label>Question Set <select id="setSolo"></select></label>
+      <label>Number of Questions <input id="countSolo" type="number" min="5" max="50" value="12" /></label>
+      <button id="btnStartSolo">Start Quiz</button>
+    </section>
+    <!-- Quiz area -->
+    <section class="card hidden" id="quizCard">
+      <h2 id="quizMeta"></h2>
+      <div id="questionBox"></div>
+      <div style="margin-top: 10px; display:flex; align-items:center; gap:10px;">
+        <span id="timer"></span>
+        <button id="btnNext" disabled>Next</button>
+      </div>
+    </section>
+    <!-- Results area -->
+    <section class="card hidden" id="resultCard">
+      <h2>Results</h2>
+      <div id="resultSummary"></div>
+      <button id="btnShare">Copy Summary</button>
+    </section>
+    <!-- Leaderboard -->
+    <section class="card" id="leaderboardCard">
+      <h2>Leaderboard (Solo)</h2>
+      <div id="leaderboard"></div>
+    </section>
+  </main>
+</div>
+<!-- Load modules -->
+<script type="module">
+  import './js/config.js';
+  import './js/rt.js';
+  import { playSound } from './js/sound.js';
+  import './js/app.js';
+  // Provide click sounds on buttons and links
+  document.querySelectorAll('button, a').forEach(el=>{
+    el.addEventListener('click', ()=>playSound('click'));
+  });
+</script>
+</body>
+</html>

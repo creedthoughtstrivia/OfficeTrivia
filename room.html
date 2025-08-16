@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Live Game Room - Creed Thoughts Trivia</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div class="overlay">
+  <nav class="navbar">
+    <h1><a href="index.html" style="color: inherit; text-decoration: none;">Creed Thoughts Trivia</a></h1>
+  </nav>
+  <main>
+    <section class="card">
+      <h2 id="roomTitle">Live Match</h2>
+      <div id="roomInfo"></div>
+      <div id="playerQuestion"></div>
+      <div style="margin-top:10px;">
+        <span id="playerTimer"></span>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Leaderboard</h2>
+      <div id="roomLeaderboard"></div>
+    </section>
+  </main>
+</div>
+<script type="module">
+  import './js/config.js';
+  import './js/rt.js';
+  import { playSound } from './js/sound.js';
+  import './js/room.js';
+</script>
+</body>
+</html>

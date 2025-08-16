@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Admin - Creed Thoughts Trivia</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div class="overlay">
+  <nav class="navbar">
+    <h1><a href="index.html" style="color: inherit; text-decoration: none;">Creed Thoughts Trivia</a></h1>
+    <ul>
+      <li><a href="solo.html">Solo Play</a></li>
+      <li><a href="live.html">Live Match</a></li>
+      <li><a href="leaderboard.html">Leaderboard</a></li>
+      <li><a href="admin.html">Admin</a></li>
+    </ul>
+  </nav>
+  <main>
+    <!-- Settings management -->
+    <section class="card">
+      <h2>Settings</h2>
+      <label>Base Correct <input id="sBase" type="number" /></label>
+      <label>Speed Bonus Max <input id="sSpeedMax" type="number" /></label>
+      <label>First Correct Bonus <input id="sFirst" type="number" /></label>
+      <label>Per‑Q Time Default <input id="sTime" type="number" /></label>
+      <label><input id="sShuffleQ" type="checkbox" /> Shuffle Questions</label>
+      <label><input id="sShuffleA" type="checkbox" /> Shuffle Answers</label>
+      <label><input id="sDailySeed" type="checkbox" /> Daily Seed</label>
+      <button id="btnSaveSettings">Save Settings</button>
+    </section>
+    <!-- Maintenance tools -->
+    <section class="card">
+      <h2>Maintenance</h2>
+      <button id="btnClearSolo">Clear Solo Leaderboard</button>
+    </section>
+  </main>
+</div>
+<script type="module">
+  import { APP } from './js/config.js';
+  import { clearSoloScores } from './js/rt.js';
+  import { playSound } from './js/sound.js';
+  const sBase = document.getElementById('sBase');
+  const sSpeedMax = document.getElementById('sSpeedMax');
+  const sFirst = document.getElementById('sFirst');
+  const sTime = document.getElementById('sTime');
+  const sShuffleQ = document.getElementById('sShuffleQ');
+  const sShuffleA = document.getElementById('sShuffleA');
+  const sDailySeed = document.getElementById('sDailySeed');
+  const btnSave = document.getElementById('btnSaveSettings');
+  const btnClearSolo = document.getElementById('btnClearSolo');
+  function loadSettings(){
+    const override = JSON.parse(localStorage.getItem('ct_settings')||'{}');
+    const settings = { ...APP.DEFAULTS, ...override };
+    sBase.value = settings.BASE_CORRECT;
+    sSpeedMax.value = settings.SPEED_MAX;
+    sFirst.value = settings.FIRST_CORRECT;
+    sTime.value = settings.TIME_PER_Q;
+    sShuffleQ.checked = settings.SHUFFLE_Q;
+    sShuffleA.checked = settings.SHUFFLE_A;
+    sDailySeed.checked = settings.DAILY_SEED;
+  }
+  loadSettings();
+  btnSave.addEventListener('click', ()=>{
+    playSound('click');
+    const newSettings = {
+      BASE_CORRECT: parseInt(sBase.value||'100',10),
+      SPEED_MAX: parseInt(sSpeedMax.value||'50',10),
+      FIRST_CORRECT: parseInt(sFirst.value||'100',10),
+      TIME_PER_Q: parseInt(sTime.value||'25',10),
+      SHUFFLE_Q: sShuffleQ.checked,
+      SHUFFLE_A: sShuffleA.checked,
+      DAILY_SEED: sDailySeed.checked
+    };
+    localStorage.setItem('ct_settings', JSON.stringify(newSettings));
+    alert('Settings saved!');
+  });
+  btnClearSolo.addEventListener('click', async ()=>{
+    playSound('click');
+    if (confirm('Clear solo leaderboard?')) {
+      await clearSoloScores();
+      alert('Solo leaderboard cleared.');
+    }
+  });
+</script>
+</body>
+</html>

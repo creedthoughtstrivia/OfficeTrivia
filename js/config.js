@@ -21,7 +21,9 @@ const APP = {
   },
   QUESTION_SETS: [
     { id: "creed-basics-001", title: "Creed Basics Vol. 1", path: "questions/creed-basics-001.json" },
-    { id: "creed-pack-001A", title: "Creed Pack 001A — Creed & Office General", path: "questions/creed-pack-001A.json" }
+    { id: "creed-pack-001A", title: "Creed Pack 001A — Creed & Office General", path: "questions/creed-pack-001A.json" },
+    // Mega mixed pack combines 100 Office trivia and 400 arithmetic questions.
+    { id: "mega-pack-500", title: "Mega Mixed Pack (500)", path: "questions/mega-pack-500.json" }
   ]
 };
 

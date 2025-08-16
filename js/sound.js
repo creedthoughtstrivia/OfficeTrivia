@@ -20,15 +20,24 @@ function playSound(type) {
   if (!AudioContext) return;
   if (!_ctx) _ctx = new AudioContext();
   const ctx = _ctx;
-  // Resume context on user gesture
+  // Resume the context on the next user gesture.  Without this the
+  // AudioContext stays suspended in some browsers until an explicit resume.
   if (ctx.state === 'suspended') {
     ctx.resume();
   }
-  function beep(freq, duration = 0.2) {
+  /**
+   * Produce a tone that can sweep in frequency and fade out gently.  The
+   * envelope uses an exponential decay for a pleasing effect.  Both
+   * freqStart and freqEnd are in Hz.  Duration is in seconds.
+   */
+  function sweep(freqStart, freqEnd = freqStart, duration = 0.25) {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    osc.frequency.value = freq;
-    gain.gain.value = 0.1;
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freqStart, ctx.currentTime);
+    osc.frequency.linearRampToValueAtTime(freqEnd, ctx.currentTime + duration);
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start();
@@ -36,16 +45,19 @@ function playSound(type) {
   }
   switch (type) {
     case 'correct':
-      beep(800, 0.3);
+      // Ascending pleasant tone
+      sweep(523.25, 659.25, 0.4);
       break;
     case 'wrong':
-      beep(200, 0.3);
+      // Descending tone to indicate error
+      sweep(300, 150, 0.4);
       break;
     case 'click':
-      beep(400, 0.05);
+      // Short neutral click
+      sweep(440, 440, 0.05);
       break;
     default:
-      beep(300, 0.05);
+      sweep(400, 350, 0.1);
   }
 }
 
